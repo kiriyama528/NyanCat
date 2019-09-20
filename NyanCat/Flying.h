@@ -10,6 +10,7 @@
 
 
 class Flying {
+protected:
 	Position position;  // Œ»İ‚ÌˆÊ’u
 	Rotation rotation;  // Œ»İ‚ÌŠp“x
 	Velocity velocity;  // ‚P•bŠÔ‚Å‚ÌˆÚ“®—Ê

@@ -13,11 +13,13 @@ class FlyingImg : public Flying {
 
 public:
 	FlyingImg();
-	FlyingImg(Position _position, Velocity _velocity, Rotation _rotation, const char* imgname);
-	FlyingImg(Position _position, Velocity _velocity, Rotation _rotation, cv::Mat *_img);
+	FlyingImg(Position _position, Rotation _rotation, Velocity _velocity, Rotation _rotate, Acceleration _acceleration, const char* imgname);
+	FlyingImg(Position _position, Rotation _rotation, Velocity _velocity, Rotation _rotate, Acceleration _acceleration, cv::Mat *_img);
 	~FlyingImg();
 	bool loadImg(const char* imgname);
 	bool setImgShadow(cv::Mat *_img);
+
+	void draw(cv::Mat &canvas);
 
 
 };
