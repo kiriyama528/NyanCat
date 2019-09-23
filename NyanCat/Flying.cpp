@@ -13,8 +13,9 @@
 Flying::Flying()
 {
 	position = { 0.f, 0.f, 0.f };
-	velocity = { 0.f, 0.f, 0.f };
 	rotation = { 0.f, 0.f, 0.f };
+	velocity = { 0.f, 0.f, 0.f };
+	rotate = { 0.f, 0.f, 0.f };
 	acceleration = { 0.f, 0.f, 0.f };
 }
 
@@ -37,7 +38,7 @@ void Flying::setParam(Position _position, Rotation _rotation, Velocity _velocity
 	acceleration = _acceleration;
 }
 
-void Flying::setParamRand(bool valid_pos, bool valid_rot, bool valid_vel, bool valid_rotate, bool valid_acc)
+void Flying::setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, bool valid_rotate, bool valid_acc)
 {
 	std::srand((unsigned int)time(NULL));
 	float random[3 * 5];
@@ -92,11 +93,13 @@ void Flying::setParamRand(bool valid_pos, bool valid_rot, bool valid_vel, bool v
 
 void Flying::pass(double seconds)
 {
+	// fprintf(stderr, "\rpos = {%lf, %lf, %lf}, rotation = {%lf, %lf, %lf}, vel = {%lf, %lf, %lf}", position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, velocity.x, velocity.y, velocity.z);  // for debug
+	// fprintf(stderr, "\r seconds:%lf", seconds); // for debug
 	position.x += (velocity.x + acceleration.x/2) * seconds;
 	position.y += (velocity.y + acceleration.y/2) * seconds;
 	position.z += (velocity.z + acceleration.z/2) * seconds;
 
-	rotation = rotation + rotate;
+	rotation = rotation + rotate * seconds;
 
 	velocity.x += acceleration.x * seconds;
 	velocity.y += acceleration.y * seconds;

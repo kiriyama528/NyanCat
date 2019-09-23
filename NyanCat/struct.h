@@ -4,6 +4,7 @@
  * @brief 基本となる構造体を定義
  **/
 
+// fix me それぞれの浮動小数点型をfloatやdoubleに切り替えられるように typedef すること
 
 struct Velocity {
 	float x, y, z;
@@ -44,6 +45,22 @@ struct Rotation {
 
 	Rotation operator - (Rotation obj) {
 		return Rotation({ x - obj.x, y - obj.y, z - obj.z });
+	}
+
+	Rotation operator * (float f) {
+		return Rotation({ x*f, y*f, z*f });
+	}
+
+	Rotation operator * (double d) {
+		return Rotation({ (float)(x*d), (float)(y*d), (float)(z*d) });
+	}
+
+	Rotation operator / (float f) {
+		return (*this) * (1/f);
+	}
+
+	Rotation operator / (double d) {
+		return (*this) * (1/d);
 	}
 };
 
