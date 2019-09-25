@@ -95,9 +95,11 @@ void Flying::pass(double seconds)
 {
 	// fprintf(stderr, "\rpos = {%lf, %lf, %lf}, rotation = {%lf, %lf, %lf}, vel = {%lf, %lf, %lf}", position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, velocity.x, velocity.y, velocity.z);  // for debug
 	// fprintf(stderr, "\r seconds:%lf", seconds); // for debug
-	position.x += (velocity.x + acceleration.x/2) * seconds;
-	position.y += (velocity.y + acceleration.y/2) * seconds;
-	position.z += (velocity.z + acceleration.z/2) * seconds;
+	
+	// ピクセル換算した位置
+	position.x += (velocity.x + acceleration.x/2) * PIXELS_PER_METER * seconds;
+	position.y += (velocity.y + acceleration.y/2) * PIXELS_PER_METER * seconds;
+	position.z += (velocity.z + acceleration.z/2) * PIXELS_PER_METER * seconds;
 
 	rotation = rotation + rotate * seconds;
 

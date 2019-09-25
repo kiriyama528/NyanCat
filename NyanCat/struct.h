@@ -6,6 +6,9 @@
 
 // fix me それぞれの浮動小数点型をfloatやdoubleに切り替えられるように typedef すること
 
+// 1メートルは何ピクセルか
+#define PIXELS_PER_METER 10
+
 struct Velocity {
 	float x, y, z;
 

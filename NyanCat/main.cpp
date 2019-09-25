@@ -23,48 +23,39 @@
 // Flyingオブジェクトのパラメータをランダムではなく手動設定
 #define DEBUG_PARAM
 
+// imreadを読み込み対象に合わせてチャネル数を指定しなくてもよいようにしたい。
+// init() で#ifdef
+//#define IMREAD_FLAG_TEST
+
 /**
  * @brief 初期設定。飛ばす画像のオリジナルの読み込みと、FlyingImgへの画像割り当て。Flying初期値の設定
  * @param org_img オリジナル画像として読み込んだもの
  **/
 bool init(FlyingImg *flying, const char *imgname, cv::Mat &org_img) {
 
+#ifdef IMREAD_FLAG_TEST
+	// ↓チャネル数などを自動判断するフラグ らしい。
+	// 失敗。3チャンネルで読み込まれていた。
+	//org_img = cv::imread(imgname, cv::IMREAD_ANYCOLOR);
+#else
 	// fix me 透過画像の読み込みフラグを自動で判別させたい
-	//org_img = cv::imread(imgname, cv::IMREAD_UNCHANGED);
-	// ↓チャネル数などを自動判断するフラグ らしい
-	org_img = cv::imread(imgname, cv::IMREAD_ANYCOLOR);
+	org_img = cv::imread(imgname, cv::IMREAD_UNCHANGED);
+#endif
+	
 	if (org_img.empty()) {
 		fprintf(stderr, " ERROR : 画像の読み込みに失敗しました。\n");
 		fprintf(stderr, "       file name : %s\n", imgname);
 		return false;
 	}
 
-	/* memo
-	{ // for debug
-		cv::Mat alpha = cv::Mat::zeros(org_img.rows, org_img.cols, CV_8UC3);
-		for (int y = 0; y < org_img.rows; ++y) {
-			for (int x = 0; x < org_img.cols; ++x) {
-				AT(alpha, y, x, 1) = AT(org_img, y, x, ALPHA);
-			}
-		}
-		
-
-
-		cv::imshow("aaa", org_img);  // for debug
-		cv::imshow("alpha", alpha);  // for debug
-		cv::waitKey();  // for debug
-	}
-	*/
-
-	
 	// Flyingオブジェクトのパラメータ設定
 	for (int i = 0; i < N_OBJECTS; i++) {
 #ifdef DEBUG_PARAM
-		Position pos = { 0,0,0 };
-		Rotation rotation = { 0,0,0 };
-		Velocity vel = { 0,0,0 };
-		Rotation rotate = { 0,0,180 };
-		Acceleration acc_tmp = { 0,0,0 };
+		Position pos = { 0,0,0 };			// 位置。中心が0,0,0
+		Rotation rotation = { 0,0,0 };		// 角度。
+		Velocity vel = { 0,20,0 };			// 移動速度
+		Rotation rotate = { 0,0,180 };		// 回転角度 / 秒
+		Acceleration acc_tmp = { 0,0,0 };	// 加速度 / 秒
 		// 運動量、変化量の設定
 		flying[i].setParam(pos, rotation, vel, rotate, acc_tmp);
 
@@ -73,7 +64,7 @@ bool init(FlyingImg *flying, const char *imgname, cv::Mat &org_img) {
 
 #endif
 		// 重力加速度
-		Acceleration acc = { 0.f, 0.f, 9.8f };
+		Acceleration acc = { 0.f, -9.8f, 0.f };
 		flying[i].setAcceleration(acc);
 
 		// 画像の割り当て(ポインタ)
@@ -132,7 +123,7 @@ int main(void) {
 		}
 
 		// 描画処理
-		cv::Mat canvas = cv::Mat::zeros(1000, 1000, CV_8UC3);
+		cv::Mat canvas = cv::Mat::zeros(500, 500, CV_8UC3);
 		for (int i = 0; i < N_OBJECTS; i++) {
 			flying[i].pass(time); 
 		}

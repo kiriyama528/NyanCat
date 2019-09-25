@@ -6,7 +6,12 @@
 #include "Flying.h"
 #include "MatAccess.h"
 
-#define DEBUG
+// 2次元描画モード。簡易版として実装
+#define DEBUG_2D_DRAW
+
+// 読み込んだ画像のチャネル数を確認。画像の変形時に参照 #ifdef
+//#define DEBUG_CHANNEL
+
 
 FlyingImg::FlyingImg() : Flying(){
 	img_shadow = NULL;
@@ -53,7 +58,7 @@ bool FlyingImg::setImgShadow(cv::Mat * _img)
 
 void FlyingImg::draw(cv::Mat &canvas)
 {
-#ifdef DEBUG
+#ifdef DEBUG_2D_DRAW
 	cv::Point2f center = cv::Point2f(
 		static_cast<float>(img_shadow->cols / 2),
 		static_cast<float>(img_shadow->rows / 2));
@@ -64,22 +69,30 @@ void FlyingImg::draw(cv::Mat &canvas)
 	cv::getRotationMatrix2D(center, rotation.z, SCALE).copyTo(affine);
 
 	cv::Mat affine_img; // 変形後の画像
-	cv::warpAffine(*img_shadow, affine_img, affine, img_shadow->size(), cv::INTER_CUBIC);
+#ifdef DEBUG_CHANNEL
+	affine_img = img_shadow->clone();
+	fprintf(stderr, "channels:%d\n", img_shadow->channels());  // for debug
+	getchar(); // for debug
 
-	// canvasへの描画
+#else
+	// 4channel画像であることが前提に
+	cv::warpAffine(*img_shadow, affine_img, affine, img_shadow->size(), cv::INTER_CUBIC);
+	
+#endif
+
+	/// canvasへの描画
+	// 中心からの相対座標(canvas)
+	int center_y = canvas.rows / 2;
+	int center_x = canvas.cols / 2;
 	for (int r = 0; r < affine_img.rows; r++) {
 		for (int c = 0; c < affine_img.cols; c++) {
-			// 中心座標系
-			/************/
-			/*  making  */
-			/************/
-
+			// 中心からの相対座標(affine_img)
+			int rr = r - affine_img.rows/2;
+			int cc = c - affine_img.cols/2;
+			
 			// 貼り付け先のcanvasの画素(x,y)を計算する
-			/************/
-			/*  making  */
-			/************/
-			int x = ? ? ? ;
-			int y = ? ? ? ;
+			int x = center_x + cc + position.x;
+			int y = center_y + rr - position.y;
 
 			// canvasの範囲内ならば
 			if (0 <= x && x < canvas.cols && 0 <= y && y < canvas.rows) {

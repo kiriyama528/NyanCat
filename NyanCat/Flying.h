@@ -13,9 +13,9 @@ class Flying {
 protected:
 	Position position;  // Œ»İ‚ÌˆÊ’u
 	Rotation rotation;  // Œ»İ‚ÌŠp“x
-	Velocity velocity;  // ‚P•bŠÔ‚Å‚ÌˆÚ“®—Ê
+	Velocity velocity;  // ‚P•bŠÔ‚Å‚ÌˆÚ“®—Ê(ƒ[ƒgƒ‹)
 	Rotation rotate;    // ‚P•bŠÔ‚Å‚Ì‰ñ“]—Ê(degree)
-	Acceleration acceleration; // 1•bŠÔ‚Å‚Ì‰Á‘¬“x
+	Acceleration acceleration; // 1•bŠÔ‚Å‚Ì‰Á‘¬“xiƒ[ƒgƒ‹–ˆ•b–ˆ•bj
 
 public:
 	Flying();
