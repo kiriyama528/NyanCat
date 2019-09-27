@@ -95,8 +95,9 @@ struct Acceleration {
 };
 
 
+// fix me 行列演算に変えたほうがわかりやすい。
 class Space {
-public:
+protected:
 	// rcdの数値を受け取る場合、row, col, depth に必ず並んでいるとする
 	typedef enum {
 		ROW = 0,

@@ -133,12 +133,14 @@
   <ItemGroup>
     <ClCompile Include="Flying.cpp" />
     <ClCompile Include="FlyingImg.cpp" />
+    <ClCompile Include="FlyingNyaImg.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="struct.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Flying.h" />
     <ClInclude Include="FlyingImg.h" />
+    <ClInclude Include="FlyingNyaImg.h" />
     <ClInclude Include="MatAccess.h" />
     <ClInclude Include="struct.h" />
   </ItemGroup>

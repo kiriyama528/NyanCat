@@ -26,7 +26,7 @@ public:
 	 * @brief ÉpÉâÉÅÅ[É^ÇÃê›íË
 	 **/
 	void setParam(Position _position, Rotation _rotation, Velocity _velocity, Rotation _rotate, Acceleration _acceleration);
-	void setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, bool valid_rotate, bool valid_acc);
+	virtual void setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, bool valid_rotate, bool valid_acc);
 	void setPosition(Position _position) { position = _position; }
 	void setVelocity(Velocity _velocity) { velocity = _velocity; }
 	void setRotation(Rotation _rotation) { rotation = _rotation; }

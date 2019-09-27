@@ -14,14 +14,17 @@
 #include <iostream>
 
 #include <opencv2/opencv.hpp>
-#include "FlyingImg.h"
+#include "FlyingNyaImg.h"
 #include "MatAccess.h"
 
 #define N_OBJECTS 1
 #define FPS 30
 
+// 時間の経過速度を X倍する。default : 1.0
+#define TIME_RATE 2.0
+
 // Flyingオブジェクトのパラメータをランダムではなく手動設定
-#define DEBUG_PARAM
+//#define DEBUG_PARAM
 
 // imreadを読み込み対象に合わせてチャネル数を指定しなくてもよいようにしたい。
 // init() で#ifdef
@@ -31,7 +34,7 @@
  * @brief 初期設定。飛ばす画像のオリジナルの読み込みと、FlyingImgへの画像割り当て。Flying初期値の設定
  * @param org_img オリジナル画像として読み込んだもの
  **/
-bool init(FlyingImg *flying, const char *imgname, cv::Mat &org_img) {
+bool init(FlyingNyaImg *flying, const char *imgname, cv::Mat &org_img) {
 
 #ifdef IMREAD_FLAG_TEST
 	// ↓チャネル数などを自動判断するフラグ らしい。
@@ -53,7 +56,7 @@ bool init(FlyingImg *flying, const char *imgname, cv::Mat &org_img) {
 #ifdef DEBUG_PARAM
 		Position pos = { 0,0,0 };			// 位置。中心が0,0,0
 		Rotation rotation = { 0,0,0 };		// 角度。
-		Velocity vel = { 0,20,0 };			// 移動速度
+		Velocity vel = { 0, 30,0 };			// 移動速度
 		Rotation rotate = { 0,0,180 };		// 回転角度 / 秒
 		Acceleration acc_tmp = { 0,0,0 };	// 加速度 / 秒
 		// 運動量、変化量の設定
@@ -87,20 +90,20 @@ void showDisplay(const char *title, cv::Mat &img) {
 /**
  * @brief 更新された新しいディスプレイを描画する
  **/
-void drawDisplay(cv::Mat &canvas, FlyingImg *flying) {	
+void drawDisplay(cv::Mat &canvas, FlyingNyaImg *flying) {	
 	
 	for (int i = 0; i < N_OBJECTS; i++) {
 		// 1つ1つのオブジェクトをキャンバスに描画。
 		// fix me 奥行き情報を考えて描画する
-		flying[i].draw(canvas);
+		flying[i].drawWithReset(canvas);
 	}
 
 }
 
 
 int main(void) {
-	FlyingImg *flying;
-	flying = new FlyingImg[N_OBJECTS];
+	FlyingNyaImg *flying;
+	flying = new FlyingNyaImg[N_OBJECTS];
 	
 	const char* imgname = "white.png";
 	cv::Mat org_img;
@@ -115,7 +118,7 @@ int main(void) {
 
 	while (1) {
 		clock_t now = clock();
-		const double time = static_cast<double>(now - old) / CLOCKS_PER_SEC;
+		const double time = static_cast<double>(now - old) / CLOCKS_PER_SEC * TIME_RATE;
 		//fprintf(stderr, "\r%lf(sec)", time);  // for debug 実行FPSの表示
 		if (time < 1.0 / FPS) {
 			// 予定したFPSの更新時間より早いので、そのまま
