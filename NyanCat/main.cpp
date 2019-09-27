@@ -17,7 +17,7 @@
 #include "FlyingNyaImg.h"
 #include "MatAccess.h"
 
-#define N_OBJECTS 1
+#define N_OBJECTS 10
 #define FPS 30
 
 // 時間の経過速度を X倍する。default : 1.0
@@ -35,6 +35,7 @@
  * @param org_img オリジナル画像として読み込んだもの
  **/
 bool init(FlyingNyaImg *flying, const char *imgname, cv::Mat &org_img) {
+	std::srand(std::time(NULL));
 
 #ifdef IMREAD_FLAG_TEST
 	// ↓チャネル数などを自動判断するフラグ らしい。
@@ -63,13 +64,9 @@ bool init(FlyingNyaImg *flying, const char *imgname, cv::Mat &org_img) {
 		flying[i].setParam(pos, rotation, vel, rotate, acc_tmp);
 
 #else
-		flying[i].setRandParam(true, true, true, true, false);
+		flying[i].setRandParam(true, true, true, true, true);
 
 #endif
-		// 重力加速度
-		Acceleration acc = { 0.f, -9.8f, 0.f };
-		flying[i].setAcceleration(acc);
-
 		// 画像の割り当て(ポインタ)
 		flying[i].setImgShadow(&org_img);
 	}
@@ -125,8 +122,10 @@ int main(void) {
 			continue;
 		}
 
-		// 描画処理
+		// 描画するキャンバスの作成
 		cv::Mat canvas = cv::Mat::zeros(500, 500, CV_8UC3);
+
+		// 時間経過による移動
 		for (int i = 0; i < N_OBJECTS; i++) {
 			flying[i].pass(time); 
 		}
@@ -141,6 +140,8 @@ int main(void) {
 		old = now;
 	}
 
+	// 終了処理
+	delete[] flying;
 
 	return 0;
 }

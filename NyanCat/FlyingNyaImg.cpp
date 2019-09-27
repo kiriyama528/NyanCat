@@ -8,16 +8,7 @@ bool FlyingNyaImg::isDrop()
 
 void FlyingNyaImg::Reset()
 {
-	setRandParam(true, true, true, true, false);
-	
-	// 上方向への投射速度
-	Velocity vel = getVelocity();
-	vel.y = 30.f;
-	setVelocity(vel);
-
-	// 重力加速度
-	Acceleration acc = { 0.f, -9.8f, 0.f };
-	setAcceleration(acc);
+	setRandParam(true, true, true, true, true);
 }
 
 FlyingNyaImg::FlyingNyaImg() : FlyingImg(){
@@ -49,7 +40,6 @@ void FlyingNyaImg::drawWithReset(cv::Mat &canvas)
 
 void FlyingNyaImg::setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, bool valid_rotate, bool valid_acc)
 {
-	std::srand((unsigned int)time(NULL));
 	float random[3 * 5];
 	for (int i = 0; i < 3 * 5; i++) {
 		// fix me パラメータの幅は調整すること
@@ -72,14 +62,14 @@ void FlyingNyaImg::setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, 
 	rot.z = (int)rot.z % 61 - 30;
 
 	vel.x = (int)vel.x % 11 - 5;
-	vel.y = (int)vel.y % 11 - 5;
+	vel.y = (int)vel.y % 11 - 5 + 30; // 中央値を30に調整
 	vel.z = (int)vel.z % 11 - 5;
 
 	rota.x = (int)rota.x % 181 - 90;
 	rota.y = (int)rota.y % 181 - 90;
 	rota.z = (int)rota.z % 181 - 90;
 
-	// 使わない。決めうち
+	// 決めうち
 	acc.x = 0.f;
 	acc.y = -9.8f;
 	acc.z = 0.f;
@@ -99,4 +89,6 @@ void FlyingNyaImg::setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, 
 	if (valid_acc) {
 		acceleration = acc;
 	}
+	
+	//fprintf(stderr, "pos = {%lf, %lf, %lf}, rotation = {%lf, %lf, %lf}, vel = {%lf, %lf, %lf}\n", position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, velocity.x, velocity.y, velocity.z);  // for debug
 }
