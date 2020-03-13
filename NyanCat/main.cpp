@@ -38,11 +38,12 @@ bool init(FlyingNyaImg *flying, const char *imgname, cv::Mat &org_img) {
 	std::srand(std::time(NULL));
 
 #ifdef IMREAD_FLAG_TEST
+	// 透過画像の読み込みフラグを自動で判別させたい
 	// ↓チャネル数などを自動判断するフラグ らしい。
 	// 失敗。3チャンネルで読み込まれていた。
 	//org_img = cv::imread(imgname, cv::IMREAD_ANYCOLOR);
 #else
-	// fix me 透過画像の読み込みフラグを自動で判別させたい
+	// 4チャンネル画像の読み込み
 	org_img = cv::imread(imgname, cv::IMREAD_UNCHANGED);
 #endif
 	
@@ -110,7 +111,6 @@ int main(void) {
 	}
 
 
-	double spf = 1 / FPS; // seconds per frame
 	clock_t old = clock();
 
 	while (1) {

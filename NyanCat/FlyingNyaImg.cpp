@@ -42,7 +42,6 @@ void FlyingNyaImg::setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, 
 {
 	float random[3 * 5];
 	for (int i = 0; i < 3 * 5; i++) {
-		// fix me パラメータの幅は調整すること
 		random[i] = std::rand();
 	}
 
@@ -52,7 +51,7 @@ void FlyingNyaImg::setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, 
 	Rotation rota = { random[9], random[10], random[11] };
 	Acceleration acc = { random[12], random[13], random[14] };
 
-	// 値を範囲内に丸める fix me 値調整
+	// 値を範囲内へ
 	pos.x = (int)pos.x % 101 - 50;
 	pos.y = 1; // 同じ高さ位置から発射する
 	pos.z = (int)pos.z % 101 - 50;
@@ -69,7 +68,7 @@ void FlyingNyaImg::setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, 
 	rota.y = (int)rota.y % 181 - 90;
 	rota.z = (int)rota.z % 181 - 90;
 
-	// 決めうち
+	// 決めうち。重力加速度のみ
 	acc.x = 0.f;
 	acc.y = -9.8f;
 	acc.z = 0.f;

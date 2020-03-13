@@ -43,7 +43,7 @@ void Flying::setRandParam(bool valid_pos, bool valid_rot, bool valid_vel, bool v
 	std::srand((unsigned int)time(NULL));
 	float random[3 * 5];
 	for (int i = 0; i < 3 * 5; i++) {
-		// fix me パラメータの幅は調整すること
+		// パラメータの幅は調整すること
 		random[i] = std::rand();
 	}
 
